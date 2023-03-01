@@ -599,6 +599,7 @@ def BG():
         current_space_abs = current_space -36
         background = background7
         location = (-300*ratio[0],-300*ratio[1])
+    background = pygame.transform.scale(background, (1536*ratio[0],846*ratio[1]))
 def hopping():
     Shop = pygame.image.load('shop.png').convert_alpha()
     Shop = pygame.transform.scale(Shop,((500*ratio[0]),(500*ratio[1])))
@@ -1311,7 +1312,7 @@ def startgame():
     center = []
     center.append(int(size[0]/2))
     center.append(int(size[1]/2))
-    font = pygame.font.SysFont(None, (60*ratio[0]))
+    font = pygame.font.SysFont(None, (60*ratio[1]))
     input_needed = False
     text_((("Welcome to Time-Traveling Kangaroo","","","Press 'enter' at any time to continue")))
     user_name()
