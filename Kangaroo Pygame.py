@@ -1,5 +1,7 @@
 import random
 import pygame
+reset_screen = False
+reset_scrn = False
 input_needed = False
 tutorial = False
 gamestart = False
@@ -19,8 +21,8 @@ echidna = False
 h = 0
 name = ""
 ItemsActive = False
-current_space = 0
-KangaCash = 20
+current_space = 1
+KangaCash = 2000
 pick = 0
 pet = []
 your_inventory = []
@@ -32,15 +34,15 @@ b = 0
 c = 0
 d = 0
 Shop = [
-    "Pretty Lights",
-    "Overcharged Space Canons",
-    "Reinforced Doors",
-    "Shiny Petrol",
+    #"Pretty Lights",
+    #"Overcharged Space Canons",
+    #"Reinforced Doors",
+    #"Shiny Petrol",
     "A Pretty Bow",
-    "A Cool Hat",
-    "Sonic Speed WiFi",
-    "New Windshield Wipers",
-    "A Platypus Poster?",
+    #"A Cool Hat",
+    #"Sonic Speed WiFi",
+    #"New Windshield Wipers",
+    #"A Platypus Poster?",
     "Powered Steering Wheel",
     "Pet Echidna"
 ]
@@ -71,26 +73,26 @@ Shop_Prices = {
     "Pet Echidna": 55
 }
 card = [
-    "Whirly Bird",
-    "Blackout",
-    "New Pair of Thongs",
-    "Cryo Machine",
-    "Wombat Encounter",
-    "Butcher",
-    "42 Wallaby Way, Sydney",
-    "Rockin' with it",
-    "Canceled",
-    "Bludge Around the House",
-    "Postie",
-    "Snaggs",
+    #"Whirly Bird",
+    #"Blackout",
+    #"New Pair of Thongs",
+    #"Cryo Machine",
+    #"Wombat Encounter",
+    #"Butcher",
+    #"42 Wallaby Way, Sydney",
+    #"Rockin' with it",
+    #"Canceled",
+    #"Bludge Around the House",
+    #"Postie",
+    #"Snaggs",
     "The Great Emu War",
-    "Shrimp on the Barbie",
-    "Opera",
-    "Dingo Encounter",
-    "New New Perth",
-    "Kangaroo Revolution",
-    "Boomerang",
-    "Wildfire"
+    #"Shrimp on the Barbie",
+    #"Opera",
+    #"Dingo Encounter",
+    #"New New Perth",
+    #"Kangaroo Revolution",
+    #"Boomerang",
+    #"Wildfire"
 ]
 card_description = {
     "Snaggs":("You go forward in time to eat some awesome sausages. ","Advance one space and lose 10 KangaCash","",""),
@@ -563,6 +565,8 @@ def BG():
     global current_space_abs
     global background
     global location
+    global reset_screen
+    global reset_scrn
     num = (size[0]/12)
     background1 = pygame.image.load('background1.jpg').convert_alpha()
     background2 = pygame.image.load('background2.jpg').convert_alpha()
@@ -598,14 +602,19 @@ def BG():
     else:
         current_space_abs = current_space -36
         background = background7
-        location = (-300*ratio[0],-300*ratio[1])
+        location = (-500*ratio[0],-500*ratio[1])
+    if current_space_abs == 0:
+        reset_screen = True
+    elif current_space_abs == 5:
+        reset_scrn = True
     background = pygame.transform.scale(background, (1536*ratio[0],846*ratio[1]))
 def hopping():
+    global current_space
+    global reset_screen
     Shop = pygame.image.load('shop.png').convert_alpha()
     Shop = pygame.transform.scale(Shop,((500*ratio[0]),(500*ratio[1])))
     num = (size[0]/12)
     BG()
-    global current_space
     if bow == True:
         kangaroo1base = pygame.image.load('Kangaroo1Bow.png').convert_alpha()
         kangaroo2base = pygame.image.load('Kangaroo2Bow.png').convert_alpha()
@@ -621,37 +630,40 @@ def hopping():
     BG()
     screen.blit(background,(0,-23))
     if echidna == True:
-        screen.blit(Echidna,(((x*ratio[0])-20*ratio[0]),((400*ratio[1])-300*ratio[1])))
+        screen.blit(Echidna,(((x*ratio[0])-20*ratio[0]),(600*ratio[1])))
     screen.blit(Shop,location)
     screen.blit(kangaroo1,((x),(400*ratio[1])))
     x += num
     pygame.display.flip()
     pause(.2)
-    BG()
     screen.blit(background,(0,-23))
     if echidna == True:
-        screen.blit(Echidna,(((x*ratio[0])-20*ratio[0]),((400*ratio[1])-300*ratio[1])))
+        screen.blit(Echidna,(((x*ratio[0])-20*ratio[0]),(600*ratio[1])))
     screen.blit(Shop,location)
     screen.blit(kangaroo2,((x),(400*ratio[1])))
-    x += num
     pygame.display.flip()
     pause(.2)
-    pygame.display.flip()
     current_space += 1
     BG()
+    if reset_screen == True:
+        x = ((current_space_abs*num*2)-(100*ratio[0]))
+        reset_screen = False
+    else:
+        x += num
     screen.blit(background,(0,-23))
     if echidna == True:
-        screen.blit(Echidna,(((x*ratio[0])-20*ratio[0]),((400*ratio[1])-300*ratio[1])))
+        screen.blit(Echidna,(((x*ratio[0])-20*ratio[0]),(600*ratio[1])))
     screen.blit(Shop,location)
     screen.blit(kangaroo1,((x),(400*ratio[1])))
     pygame.display.flip()
     pause(1)
 def flopping():
+    global current_space
+    global reset_scrn
     Shop = pygame.image.load('shop.png').convert_alpha()
     Shop = pygame.transform.scale(Shop,((500*ratio[0]),(500*ratio[1])))
     num = (size[0]/24)
     BG()
-    global current_space
     if bow == True:
         kangaroo1base = pygame.image.load('Kangaroo1Bow.png').convert_alpha()
         kangaroo3base = pygame.image.load('Kangaroo3Bow.png').convert_alpha()
@@ -672,28 +684,25 @@ def flopping():
     kangaroo4 = pygame.transform.scale(kangaroo4base, ((300*ratio[0]),(300*ratio[1])))
     kangaroo5 = pygame.transform.scale(kangaroo5base, ((300*ratio[0]),(300*ratio[1])))
     x = ((current_space_abs*num*4)-(100*ratio[0]))
-    BG()
     screen.blit(background,(0,-23))
     if echidna == True:
-        screen.blit(Echidna,(((x*ratio[0])-20*ratio[0]),((400*ratio[1])-300*ratio[1])))
+        screen.blit(Echidna,(((x*ratio[0])-20*ratio[0]),(600*ratio[1])))
     screen.blit(Shop,location)
     screen.blit(kangaroo1,((x*ratio[0]),(400*ratio[1])))
     x -= num
     pygame.display.flip()
     pause(.2)
-    BG()
     screen.blit(background,(0,-23))
     if echidna == True:
-        screen.blit(Echidna,(((x*ratio[0])-20*ratio[0]),((400*ratio[1])-300*ratio[1])))
+        screen.blit(Echidna,(((x*ratio[0])-20*ratio[0]),(600*ratio[1])))
     screen.blit(Shop,location)
     screen.blit(kangaroo3,((x*ratio[0]),(400*ratio[1])))
     x -= num
     pygame.display.flip()
     pause(.2)
-    BG()
     screen.blit(background,(0,-23))
     if echidna == True:
-        screen.blit(Echidna,(((x*ratio[0])-20*ratio[0]),((400*ratio[1])-300*ratio[1])))
+        screen.blit(Echidna,(((x*ratio[0])-20*ratio[0]),(600*ratio[1])))
     screen.blit(Shop,location)
     screen.blit(kangaroo4,((x*ratio[0]),(400*ratio[1])))
     x -= num
@@ -701,9 +710,14 @@ def flopping():
     pause(.2)
     current_space -= 1
     BG()
+    if reset_scrn == True:
+        x = ((current_space_abs*num*4)-(100*ratio[0]))
+        reset_scrn = False
+    else:
+        x -= num
     screen.blit(background,(0,-23))
     if echidna == True:
-        screen.blit(Echidna,(((x*ratio[0])-20*ratio[0]),((400*ratio[1])-300*ratio[1])))
+        screen.blit(Echidna,(((x*ratio[0])-20*ratio[0]),(600*ratio[1])))
     screen.blit(Shop,location)
     screen.blit(kangaroo5,((x*ratio[0]),(400*ratio[1])))
     x -= num
@@ -772,16 +786,12 @@ def flop():
     else:
         pause(.1)
     if x == -1:
-        x = 1
-        text_(("Kangaroo falls " + str(x) + " space back.","","",""))
-        x = -1
+        text_(("Kangaroo falls " + str(abs(x)) + " space back.","","",""))
     elif x >= 0:
         text_(("Active items have prevented the time machine from going","back in time.","",""))
     else:
-        x = abs(x)
-        text_(("Kangaroo falls " + str(x) + " spaces back.","","",""))
-        x = -x
-    if current_space > abs(x):
+        text_(("Kangaroo falls " + str(abs(x)) + " spaces back.","","",""))
+    if current_space >= abs(x):
         while q < abs(x):
             flopping()
             q += 1
@@ -789,7 +799,9 @@ def flop():
     elif x >= 0:
         pause(.1)
     else:
-        current_space = 0
+        while current_space > 0:
+            flopping()
+            shop()
     pause(1)
 def shop():
     global input_needed
@@ -834,9 +846,8 @@ def equip(x):
     x = str(your_inventory[x])
     if x == "Pretty Lights" or x == "A Platypus Poster?":
         if len(equipped_item) == 1:
-            text_(("Sorry, you may only have one decoration in use at a time.","You currently are using " + equipped_item[0] + ".","",""))
             input_needed = True
-            user_input(("Press 'y' to discard this item and equip " + x + ",","or press 'enter' to continue without equipping this item.","",""))
+            user_input(("Sorry, you may only have one decoration in use at a time.","You currently are using " + equipped_item[0] + ".","Press 'y' to discard this item and equip " + x + ",","or press 'enter' to continue without equipping this item."))
             if d == 'y':
                 equipped_item[0] = x
                 your_inventory.remove(x)
@@ -849,9 +860,8 @@ def equip(x):
             text_((("You have successfully equipped " + equipped_item[0] + "."),"","",""))
     elif x == "A Cool Hat" or x == "A Pretty Bow":
         if len(headwear) == 1:
-            text_(("Sorry, your head isn't big enough for two accessories.","You are currently wearing " + headwear[0] + ".","",""))
             input_needed = True
-            user_input(("Press 'y' to discard this item and equip " + x + ",", "or press 'enter' to continue without equipping this item.","",""))
+            user_input(("Sorry, your head isn't big enough for two accessories.","You are currently wearing " + headwear[0] + ".","Press 'y' to discard this item and equip " + x + ",", "or press 'enter' to continue without equipping this item."))
             if d == 'y':
                 headwear[0] = x
                 your_inventory.remove(x)
@@ -941,7 +951,7 @@ def description_ask():
     global d
     global KangaCash
     input_needed = True
-    user_input(("Press 'a' to learn more about or purchase '" + picka + "',","'b' to learn more about or purchase '" + pickb + "', ","'c' to learn more about or purchase '" + pickc + "', or ","'enter' to continue on."))
+    user_input(("Press 'a' to view or purchase '" + picka + "',","'b' to view or purchase '" + pickb + "', ","'c' to view or purchase '" + pickc + "', or ","'enter' to continue on."))
     if d == 'a' or d == 'b' or d == 'c':
         description()
     else:
@@ -958,9 +968,8 @@ def description():
             text_(("Sorry, you do not have enough KangaCash for this item.","","",""))
             description_ask()
         else:
-            text_(("Would you like to purchase " + Shop[a] + "?","","",""))
             input_needed = True
-            user_input(("Press 'y' for yes, or press 'enter' to see other options.","","",""))
+            user_input(("Would you like to purchase " + Shop[a] + "?","Press 'y' for yes, or press 'enter' to see other options.","",""))
             if d == 'y':
                 if len(your_inventory) == 3:
                     text_(("Sorry, you cannot have more than three items in your ","inventory at a time. Please discard one.","",""))
@@ -1001,7 +1010,7 @@ def description():
             user_input(("Enter 'y' for yes, or press 'enter' to see other options.","","",""))
             if d == 'y':
                 if len(your_inventory) == 3:
-                    text_(("Sorry, you cannot have more than three items in your ","inventory at a time. Please discard one."))
+                    text_(("Sorry, you cannot have more than three items in your ","inventory at a time. Please discard one.","",""))
                     input_needed = True
                     user_input(("Press 'a' to discard " + your_inventory[0] + ", ","'b' to discard " + your_inventory[1] + ", ","'c' to discard " + your_inventory[2] + ", or ","'enter' to cancel your purchase."))
                     if d == 'a':
@@ -1077,18 +1086,15 @@ def item():
     if len(your_inventory) == 0:
         text_(("You currently have no items to use.","","",""))
     else:
-        text_(("Would you like to use or equip an item?","","",""))
         input_needed = True
-        user_input(("Press 'y' to access your items or ","'enter' to continue without using an item.","",""))
+        user_input(("Would you like to use or equip an item?","Press 'y' to access your items or ","'enter' to continue without using an item.",""))
         if d == 'y':
             text_(("You have: " + str(your_inventory),"","",""))
-            text_(("Would you like to read more about your items?","","",""))
             if len(your_inventory) == 1:
                 input_needed = True
-                user_input(("Press 'y' to learn more about " + your_inventory[0] + " or ","'enter' to continue on without using items.","",""))
+                user_input(("Would you like to view or use your items?","Press 'y' to view or use " + your_inventory[0] + " or ","'enter' to continue on without using items.",""))
                 if d == 'y':
                     text_((Shop_Descriptions[your_inventory[0]]))
-                    text_(("Would you like to use this item?","","",""))
                     input_needed = True
                     user_input(("Press 'y' to use this item, or ","'enter' to continue without using an item.","",""))
                     if d == 'y':
@@ -1097,17 +1103,15 @@ def item():
                         text_(("Okay, maybe next time!","","",""))
             elif len(your_inventory) == 2:
                 input_needed = True
-                user_input(("Press 'a' to learn more about " + your_inventory[0] + ", ","'b' to learn more about " + your_inventory[1] + ", or ","'enter' to continue on without using items.",""))
+                user_input(("Press 'a' to view or use " + your_inventory[0] + ", ","'b' to view or use " + your_inventory[1] + ", or ","'enter' to continue on without using items.",""))
                 if d == 'a':
                     text_(Shop_Descriptions[your_inventory[0]],3)
-                    text_(("Would you like to use this item?","","",""))
                     input_needed = True
-                    user_input(("Press 'y' to use this item, ","'b' to view " + your_inventory[1] + ", or ","'enter' to continue without using an item.",""))
+                    user_input(("Press 'y' to use this item, ","'b' to view or use " + your_inventory[1] + ", or ","'enter' to continue without using an item.",""))
                     if d == 'y':
                         equip(0)
                     elif d == 'b':
                         text_(Shop_Descriptions[your_inventory[1]])
-                        text_(("Would you like to use this item?","","",""))
                         input_needed = True
                         user_input(("Press 'y' to use this item, ","'a' to equip " + your_inventory[0] + ", or ","'enter' to continue without using an item.",""))
                         if d == 'y':
@@ -1120,14 +1124,12 @@ def item():
                         text_(("Okay, maybe next time!","","",""))
                 elif d == 'b':
                     text_(Shop_Descriptions[your_inventory[1]])
-                    text_(("Would you like to use this item?","","",""))
                     input_needed = True
                     user_input(("Press 'y' to use this item, ","'a' to view " + your_inventory[0] + ", ","or 'enter' to continue without using an item.",""))
                     if d == 'y':
                         equip(1)
                     elif d == 'a':
                         text_(Shop_Descriptions[your_inventory[0]])
-                        text_(("Would you like to use this item?","","",""))
                         input_needed = True
                         user_input(("Press 'y' to use this item, ","'b' to equip " + your_inventory[1] + ", "," or 'enter' to continue without using an item.",""))
                         if d == 'y':
@@ -1142,26 +1144,23 @@ def item():
                     text_(("Okay, maybe next time!","","",""))
             else:
                 input_needed = True
-                user_input(("Press 'a' to learn more about " + your_inventory[0] + ", ","'b' to learn more about " + your_inventory[1] + ", ","'c' to learn more about " + your_inventory[2] + ", or ","'enter' to continue on without using items."))
+                user_input(("Press 'a' to view or use " + your_inventory[0] + ", ","'b' to view or use " + your_inventory[1] + ", ","'c' to view or use " + your_inventory[2] + ", or ","'enter' to continue on without using items."))
                 if d == 'a':
                     text_(Shop_Descriptions[your_inventory[0]])
-                    text_(("Would you like to use this item?","","",""))
                     input_needed = True
-                    user_input(("Press 'y' to use this item, ","'b' to learn more about " + your_inventory[1] + ", ","'c' to learn more about " + your_inventory[2] + ", or ","'enter' to continue without using an item."))
+                    user_input(("Press 'y' to use this item, ","'b' to view or use " + your_inventory[1] + ", ","'c' to view or use " + your_inventory[2] + ", or ","'enter' to continue without using an item."))
                     if d == 'y':
                         equip(0)
                     elif d == 'b':
                         text_(Shop_Descriptions[your_inventory[1]])
-                        text_(("Would you like to use this item?","","",""))
                         input_needed = True
-                        user_input(("Press 'y' to use this item, ","'a' to equip " + your_inventory[0] + ", ","'c' to learn more about " + your_inventory[2] + ", or ","'enter' to continue without using an item."))
+                        user_input(("Press 'y' to use this item, ","'a' to equip " + your_inventory[0] + ", ","'c' to view or use " + your_inventory[2] + ", or ","'enter' to continue without using an item."))
                         if d == 'y':
                             equip(1)
                         elif d == 'a':
                             equip(0)
                         elif d == 'c':
                             text_(Shop_Descriptions[your_inventory[2]])
-                            text_(("Would you like to use this item?","","",""))
                             input_needed = True
                             user_input(("Press 'y' to use this item, ","'a' to equip " + your_inventory[0] + ", ","'b' to equip " + your_inventory[1] + ", or ","'enter' to continue without using an item."))
                             if d == 'y':                                
@@ -1178,23 +1177,20 @@ def item():
                         text_(("Okay, maybe next time!","","",""))
                 elif d == 'b':
                     text_(Shop_Descriptions[your_inventory[1]])
-                    text_(("Would you like to use this item?","","",""))
                     input_needed = True
-                    user_input(("Press 'y' to use this item, ","'a' to learn more about " + your_inventory[0] + ", ","'c' to learn more about " + your_inventory[2] + ", or ","'enter' to continue without using an item."))
+                    user_input(("Press 'y' to use this item, ","'a' to view or use " + your_inventory[0] + ", ","'c' to view or use " + your_inventory[2] + ", or ","'enter' to continue without using an item."))
                     if d == 'y':
                         equip(1)                        
                     elif d == 'a':
                         text_(Shop_Descriptions[your_inventory[0]])
-                        text_(("Would you like to use this item?","","",""))
                         input_needed = True
-                        user_input(("Press 'y' to use this item, ","'b' to equip " + your_inventory[1] + ", ","'c' to learn more about " + your_inventory[2] + ", or ","'enter' to continue without using an item."))
+                        user_input(("Press 'y' to use this item, ","'b' to equip " + your_inventory[1] + ", ","'c' to view or use " + your_inventory[2] + ", or ","'enter' to continue without using an item."))
                         if d == 'y':
                             equip(0)
                         elif d == 'b':
                             equip(1)
                         elif d == 'c':
                             text_(Shop_Descriptions[your_inventory[2]])
-                            text_(("Would you like to use this item?","","",""))
                             input_needed = True
                             user_input(("Press 'y' to use this item, ","'a' to equip " + your_inventory[0] + ", ","'b' to equip " + your_inventory[1] + ", or ","'enter' to continue without using an item."))
                             if d == 'y':
@@ -1209,14 +1205,12 @@ def item():
                             text_(("Okay, maybe next time!","","",""))
                     elif d == 'c':
                         text_(Shop_Descriptions[your_inventory[2]])
-                        text_(("Would you like to use this item?","","",""))
                         input_needed = True
-                        user_input(("Press 'y' to use this item, ","'a' to learn more about " + your_inventory[0] + ", ","'b' to equip " + your_inventory[1] + ", or ","'enter' to continue without using an item."))
+                        user_input(("Press 'y' to use this item, ","'a' to view or use " + your_inventory[0] + ", ","'b' to equip " + your_inventory[1] + ", or ","'enter' to continue without using an item."))
                         if d == 'y':
                             equip(2)
                         elif d == 'a':
                             text_(Shop_Descriptions[your_inventory[0]])
-                            text_("Would you like to use this item?")
                             input_needed = True
                             user_input(("Press 'y' to use this item, ","'b' to equip " + your_inventory[1] + ", ","'c' to equip " + your_inventory[2] + ", or ","'enter' to continue without using an item."))
                             if d == 'y':
@@ -1235,21 +1229,18 @@ def item():
                         text_(("Okay, maybe next time!","","",""))
                 elif d == 'c':
                     text_(Shop_Descriptions[your_inventory[2]])
-                    text_(("Would you like to use this item?","","",""))
                     input_needed = True
-                    user_input(("Press 'y' to use this item, ","'a' to learn more about " + your_inventory[0] + ", ","'b' to learn more about " + your_inventory[1] + ", or ","'enter' to continue without using an item."))
+                    user_input(("Press 'y' to use this item, ","'a' to view or use " + your_inventory[0] + ", ","'b' to view or use " + your_inventory[1] + ", or ","'enter' to continue without using an item."))
                     if d == 'y':
                         equip(2)
                     elif d == 'a':
                         text_(Shop_Descriptions[your_inventory[0]])
-                        text_(("Would you like to use this item?","","",""))
                         input_needed = True
-                        user_input(("Press 'y' to use this item, ","'b' to learn more about " + your_inventory[1] + ", ","'c' to equip " + your_inventory[2] + ", or ","'enter' to continue without using an item."))
+                        user_input(("Press 'y' to use this item, ","'b' to view or use " + your_inventory[1] + ", ","'c' to equip " + your_inventory[2] + ", or ","'enter' to continue without using an item."))
                         if d == 'y':
                             equip(1)
                         elif d == 'b':
                             text_(Shop_Descriptions[your_inventory[1]])
-                            text_(("Would you like to use this item?","","",""))
                             input_needed = True
                             user_input(("Press 'y' to use this item, ","'a' to equip " + your_inventory[0] + ", ","'c' to equip " + your_inventory[2] + ", or ","'enter' to continue without using an item."))
                             if d == 'y':
@@ -1266,14 +1257,12 @@ def item():
                             text_(("Okay, maybe next time!","","",""))
                     elif d == 'b':
                         text_(Shop_Descriptions[your_inventory[1]])
-                        text_(("Would you like to use this item?","","",""))
                         input_needed = True
-                        user_input(("Press 'y' to use this item, ","'a' to learn more about " + your_inventory[0] + ", ","'c' to equip " + your_inventory[2] + ", or ","'enter' to continue without using an item."))
+                        user_input(("Press 'y' to use this item, ","'a' to view or use " + your_inventory[0] + ", ","'c' to equip " + your_inventory[2] + ", or ","'enter' to continue without using an item."))
                         if d == 'y':
                             equip(1)
                         elif d == 'a':
                             text_(Shop_Descriptions[your_inventory[0]])
-                            text_(("Would you like to use this item?","","",""))
                             input_needed = True
                             user_input(("Press 'y' to use this item, ","'b' to equip " + your_inventory[1] + ", ","'c' to equip " + your_inventory[2] + ", or ","'enter' to continue without using an item."))
                             if d == 'y':
@@ -1317,9 +1306,9 @@ def startgame():
     text_((("Welcome to Time-Traveling Kangaroo","","","Press 'enter' at any time to continue")))
     user_name()
     input_needed = False
-    text_(("Welcome, " + str(name) + "!","","",""))
+    text_(("Welcome, " + str(name) + "!","","","Press 'enter' at any time to continue"))
     input_needed = True
-    user_input(("Would you like to view the tutorial?","Press 'a' to view tutorial,","or press 'enter' to start the game",""))
+    user_input(("Would you like to view the tutorial?","","Press 'a' to to view tutorial,","or press 'enter' to start the game"))
     if d == ' ':
         gamestart = True
         playgame()
@@ -1372,9 +1361,8 @@ def playgame():
 def endgame():
     global input_needed
     text_(("Whoohoo! You finished! You made it to the end of time. ","Now you can sit back, relax, and watch the world burn.","",""))
-    text_(("Would you like to play again?","","",""))
     input_needed = True
-    user_input(("To play again, press 'y'.", "To end the game, press the 'enter' key.","",""))
+    user_input(("Would you like to play again?","","To play again, press 'y'.","To end the game, press the 'enter' key."))
     if d == 'y':
         global current_space
         global KangaCash
