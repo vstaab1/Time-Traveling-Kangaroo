@@ -34,15 +34,15 @@ b = 0
 c = 0
 d = 0
 Shop = [
-    #"Pretty Lights",
-    #"Overcharged Space Canons",
-    #"Reinforced Doors",
-    #"Shiny Petrol",
+    "Pretty Lights",
+    "Overcharged Space Canons",
+    "Reinforced Doors",
+    "Shiny Petrol",
     "A Pretty Bow",
-    #"A Cool Hat",
-    #"Sonic Speed WiFi",
-    #"New Windshield Wipers",
-    #"A Platypus Poster?",
+    "A Cool Hat",
+    "Sonic Speed WiFi",
+    "New Windshield Wipers",
+    "A Platypus Poster?",
     "Powered Steering Wheel",
     "Pet Echidna"
 ]
