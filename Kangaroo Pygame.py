@@ -598,7 +598,7 @@ def BG():
     elif current_space <= 35:
         current_space_abs = current_space -30
         background = background6
-        location = (num*5,200*ratio[1])
+        location = (num*3,200*ratio[1])
     else:
         current_space_abs = current_space -36
         background = background7
